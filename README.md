@@ -25,3 +25,6 @@ Declare your OPEN_AI_KEY in `.env` file
 Run the app by: `python3 main.py`
 
 The app will run with default port `5000`: `http:127.0.0.1:5000/open-ai`
+
+## Development
+Please use `develop` branch to develop a new feature.

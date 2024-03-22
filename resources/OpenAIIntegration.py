@@ -10,7 +10,6 @@ class OpenAIIntegration(Resource):
     client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
     def get(self):
-        print(self.client.api_key)
         chat_completion = self.client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": "Hello world"}]

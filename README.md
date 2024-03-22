@@ -17,7 +17,7 @@ AI-Copilot is an AI-powered assistant designed to streamline the workflow by int
     On Windows: `openai-env\Scripts\activate`
 
     On Unix or MacOS: `source openai-env/bin/activate`
-5) Install library dependencies: `pip install -r requirements.txt`
+5) Install library dependencies: `pip install -r requirement.txt`
 
 ## Usage
 Declare your OPEN_AI_KEY in `.env` file

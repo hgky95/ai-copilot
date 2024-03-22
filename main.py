@@ -2,7 +2,7 @@ from flask import Flask
 from flask_restful import Api
 
 
-from src.resources.OpenAIIntegration import OpenAIIntegration
+from resources.OpenAIIntegration import OpenAIIntegration
 
 
 app = Flask(__name__)

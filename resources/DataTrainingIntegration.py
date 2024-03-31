@@ -1,25 +1,22 @@
-import os
-import pandas as pd
-from sqlalchemy import create_engine
+from embedchain.loaders.mysql import MySQLLoader
 from dotenv import load_dotenv
-from sqlalchemy.engine import URL
+import os
 
-load_dotenv()
 
-connection_url = URL.create(
-    drivername=os.getenv('DB_DRIVER'),
-    username=os.getenv('DB_USERNAME'),
-    password=os.getenv('DB_PASSWORD'),
-    host=os.getenv('DB_HOST'),
-    port=3306,
-    database=os.getenv('DB_NAME')
-)
-engine = create_engine(connection_url)
+class DataTrainingIntegration:
 
-sql_query = 'SELECT * FROM project'
 
-# Execute the query and read the results into a DataFrame
-df = pd.read_sql(sql_query, engine)
+    config = {
+        "host": os.getenv('DB_HOST'),
+        "port": os.getenv('DB_PORT'),
+        "database": os.getenv('DB_NAME'),
+        "user": os.getenv('DB_USERNAME'),
+        "password": os.getenv('DB_PASSWORD'),
+    }
 
-# Display the DataFrame
-print(df)
+    def retrieve_data(self, app, question):
+        load_dotenv()
+        mysql_loader = MySQLLoader(config=self.config)
+        app.add("SELECT * FROM project;", data_type='mysql', loader=mysql_loader)
+        response = app.query(question)
+        print(response)

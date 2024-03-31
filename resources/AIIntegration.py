@@ -3,6 +3,7 @@ from embedchain import App
 from flask_restful import Resource
 from embedchain.loaders.mysql import MySQLLoader
 from dotenv import load_dotenv
+from flask import request, jsonify
 
 
 class AIIntegration(Resource):
@@ -17,10 +18,16 @@ class AIIntegration(Resource):
         "password": os.getenv('DB_PASSWORD'),
     }
 
-    def get(self):
-        mysql_loader = MySQLLoader(config=self.config)
-        self.app.add("SELECT * FROM project;", data_type='mysql', loader=mysql_loader)
-        response = self.app.query("What is the description of Office Construction project?")
+    mysql_loader = MySQLLoader(config=config)
+    app.add("SELECT * FROM currency;", data_type='mysql', loader=mysql_loader)
+    app.add("SELECT * FROM member;", data_type='mysql', loader=mysql_loader)
+    app.add("SELECT * FROM project;", data_type='mysql', loader=mysql_loader)
+    app.add("SELECT * FROM task;", data_type='mysql', loader=mysql_loader, metadata={"table": "task"})
+
+    def post(self):
+        data = request.get_json()
+        question = data['question']
+        print(question)
+        response = self.app.query(question)
         print(response)
-        print("TEST")
-        return "msgContent"
+        return jsonify({"data": response})

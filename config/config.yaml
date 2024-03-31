@@ -1,12 +1,29 @@
 llm:
   provider: openai
   config:
-    model: 'gpt-3.5-turbo'
+    model: 'gpt-3.5-turbo-0125'
+    #model: 'gpt-4-0125-preview'
     temperature: 0.5
     max_tokens: 1000
     top_p: 1
     stream: false
+    prompt: |
+      Use the following pieces of context to answer the query at the end.
+      If you don't know the answer, just say that you don't know, don't try to make up an answer.
+
+      $context
+
+      Query: $query
+
+      Helpful Answer:
 embedder:
   provider: openai
   config:
-    model: 'text-embedding-3-small'
+    #model: 'text-embedding-3-small'
+    model: 'text-embedding-3-large'
+vectordb:
+  provider: chroma
+  config:
+    collection_name: 'my-collection'
+    dir: db
+    allow_reset: true

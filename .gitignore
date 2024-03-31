@@ -1,6 +1,6 @@
 .venv
 openai-env
-db/*
+db
 .idea/
 resources/data-generation/__pycache__
 

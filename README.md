@@ -4,7 +4,7 @@ AI-Copilot is an AI-powered assistant designed to streamline the workflow by int
 
 ## Requirements
 
-- Python v3
+- Python 3.11 (**3.9 <= version < 3.12**)
 - OpenAI
 - Python framework and libraries: Flask-RESTful, dotenv, Embedchain
 

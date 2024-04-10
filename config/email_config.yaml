@@ -1,0 +1,31 @@
+llm:
+  provider: openai
+  config:
+    model: 'gpt-3.5-turbo-0125'
+    #model: 'gpt-4-0125-preview'
+    temperature: 0.2
+    max_tokens: 1000
+    number_documents: 10
+    top_p: 1
+    stream: false
+    prompt: |
+      Use the following pieces of context to answer the query at the end.
+      Users ask you to write a draft email to update stakeholders about the ongoing project based on the project name.
+      
+      
+      $context
+
+      Query: $query
+
+      Helpful Answer:
+embedder:
+  provider: openai
+  config:
+    #model: 'text-embedding-3-small'
+    model: 'text-embedding-3-large'
+vectordb:
+  provider: chroma
+  config:
+    collection_name: 'my-collection'
+    dir: db
+    allow_reset: true

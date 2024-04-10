@@ -2,12 +2,7 @@ import os
 from embedchain import App
 from flask_restful import Resource
 from embedchain.loaders.mysql import MySQLLoader
-from dotenv import load_dotenv
 from flask import request, jsonify
-from embedchain.config import BaseLlmConfig
-
-from resources.CustomPromptConstant import PREFIX
-
 from resources.PromptType import PromptType
 
 
@@ -28,41 +23,42 @@ class AIIntegration(Resource):
 
         if PromptType.FORECAST.value == prompt_type.upper():
             embedchain_app = App.from_config(config_path="./config/forecast_config.yaml")
-            embedchain_app.reset()
+            self.wipe_data(embedchain_app)
             embedchain_app.add(source='./dataset/cost_item.csv', data_type='csv')
             embedchain_app.add(source='https://www.oanda.com/currency-converter/live-exchange-rates/')
         elif PromptType.REPORT.value == prompt_type.upper():
+            #TODO: update report_config.yaml
             embedchain_app = App.from_config(config_path="./config/report_config.yaml")
-            embedchain_app.reset()
-            embedchain_app.add("SELECT * FROM project;", data_type='mysql', loader=self.mysql_loader)
-            embedchain_app.add("SELECT * FROM task;", data_type='mysql', loader=self.mysql_loader)
-            embedchain_app.add("SELECT * FROM currency;", data_type='mysql', loader=self.mysql_loader)
-            embedchain_app.add("SELECT * FROM member;", data_type='mysql', loader=self.mysql_loader)
+            self.wipe_data(embedchain_app)
+            self.add_all_resources(embedchain_app)
         elif PromptType.PLAN.value == prompt_type.upper():
+            #TODO: update plan_config.yaml
             embedchain_app = App.from_config(config_path="./config/plan_config.yaml")
-            embedchain_app.reset()
-            embedchain_app.add("SELECT * FROM project;", data_type='mysql', loader=self.mysql_loader)
-            embedchain_app.add("SELECT * FROM task;", data_type='mysql', loader=self.mysql_loader)
-            embedchain_app.add("SELECT * FROM currency;", data_type='mysql', loader=self.mysql_loader)
-            embedchain_app.add("SELECT * FROM member;", data_type='mysql', loader=self.mysql_loader)
+            self.wipe_data(embedchain_app)
+            self.add_all_resources(embedchain_app)
         elif PromptType.EMAIL.value == prompt_type.upper():
             embedchain_app = App.from_config(config_path="./config/email_config.yaml")
-            embedchain_app.reset()
+            self.wipe_data(embedchain_app)
             embedchain_app.add("SELECT * FROM project;", data_type='mysql', loader=self.mysql_loader)
             embedchain_app.add("SELECT * FROM task", data_type='mysql', loader=self.mysql_loader)
             embedchain_app.add("SELECT * FROM member;", data_type='mysql', loader=self.mysql_loader)
             embedchain_app.add("SELECT * FROM currency;", data_type='mysql', loader=self.mysql_loader)
         else:
             embedchain_app = App.from_config(config_path="./config/general_config.yaml")
-            embedchain_app.reset()
-            embedchain_app.add("SELECT * FROM project;", data_type='mysql', loader=self.mysql_loader)
-            embedchain_app.add("SELECT * FROM task;", data_type='mysql', loader=self.mysql_loader)
-            embedchain_app.add("SELECT * FROM currency;", data_type='mysql', loader=self.mysql_loader)
-            embedchain_app.add("SELECT * FROM member;", data_type='mysql', loader=self.mysql_loader)
-
+            self.wipe_data(embedchain_app)
+            self.add_all_resources(embedchain_app)
 
         final_response = embedchain_app.query(question,
                                               #citations=True
                                               )
         print("Final response: \n", final_response)
         return jsonify({"data": final_response})
+
+    def wipe_data(self, embedchain_app):
+        embedchain_app.reset()
+
+    def add_all_resources(self, embedchain_app):
+        embedchain_app.add("SELECT * FROM project;", data_type='mysql', loader=self.mysql_loader)
+        embedchain_app.add("SELECT * FROM task;", data_type='mysql', loader=self.mysql_loader)
+        embedchain_app.add("SELECT * FROM currency;", data_type='mysql', loader=self.mysql_loader)
+        embedchain_app.add("SELECT * FROM member;", data_type='mysql', loader=self.mysql_loader)

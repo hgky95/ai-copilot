@@ -1,0 +1,61 @@
+llm:
+  provider: openai
+  config:
+    model: 'gpt-3.5-turbo-0125'
+    #model: 'gpt-4-0125-preview'
+    temperature: 0.2
+    max_tokens: 1000
+    number_documents: 10
+    top_p: 1
+    stream: false
+    prompt: |
+      Use the following pieces of context to answer the query at the end.
+      You are given information about the construction project and you need to forecast the budget to complete this project. The total cost should be a specific number, and should be included in the response.
+      Below is the csv structure that includes all the material name and its price, currency, unit of measurement:
+      Csv file contains 6 columns: ['Cost Item Id','Name','Unit of Measurement','Currency','Price','Tags']
+      
+      Please check your dataset carefully, the currency of some materials in your dataset maybe different. For example: the price of one bag cement is 10 USD, one windows is 25 USD but one door is 22.5 EUR.
+      Please note that:
+      - Prices vary for materials such as cement, bricks, sand, doors, and windows. Prices should be retrieved from the dataset.
+      - Conversion of units is required before processing calculations. For instance, if users mention 100 bricks but the dataset uses the unit 'thousand,' you must convert 100 bricks to 0.1 thousand.
+      - Material currencies differ. If not in USD, conversion to USD is necessary. Use the latest exchange rates from 'https://www.oanda.com/currency-converter/live-exchange-rates/'. If you want to convert GBP to USD, let take value of the pair GBP/USD. Or if you want to convert EUR to USD, let take value of the pair EUR/USD.
+      - Exchange rates are dynamic, so always fetch the latest rates from the provided link.
+      
+      ```For example:
+      Forecast the budget to renovate the elementary school that need to:
+      1) To calculate the cost to renovate wall for twenty rooms. Know that one room:
+        - having 25 square feet
+        - and one square feet requires 0.5 cement bag and 100 bricks and 10 cubic meter sand
+      2) Replace 30 windows
+      3) Replace 20 doors
+      
+      To forecast the project's budget, let's think step by step:
+      1) To calculate the cost for renovate wall for twenty rooms, we need to calculate for one room. To calculate cost for one room, we need to calculate cost for one square feet.
+        + Cost for renovate wall for one square feet: 
+          + 100 bricks = 0.1 thousand bricks
+          + 1 thousand bricks = 15.5 EUR = 16.82 USD (convert EUR to USD)
+          + Cost of one square feet = (cost of cement) + (cost of bricks) + (cost of sand) = (0.5 x 10) + (0.1 x 16.82) + (10 x 20) = 206.682
+        - Cost for renovate wall for one room (equal 25 square feet) = (cost of one square feet) x 25 = 25 x 206.682 = 5167.05
+        - Therefore, cost for renovate wall for twenty rooms = (cost of one room) x 20 = 20 x  5167.05 = 103341
+      2) Cost for replace 30 windows: 30 x 15 = 750
+      3) Cost for replace 20 doors:
+        - cost of each door = 22.5 EUR = 24.42 USD
+        - cost of 20 doors = 20 x 24.42 = 488.4```
+      
+      
+       $context
+
+      Query: $query
+
+      Helpful Answer:
+embedder:
+  provider: openai
+  config:
+    #model: 'text-embedding-3-small'
+    model: 'text-embedding-3-large'
+vectordb:
+  provider: chroma
+  config:
+    collection_name: 'forecast-collection'
+    dir: db
+    allow_reset: true

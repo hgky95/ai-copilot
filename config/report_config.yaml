@@ -1,0 +1,49 @@
+llm:
+  provider: openai
+  config:
+    model: 'gpt-3.5-turbo-0125'
+    #model: 'gpt-4-0125-preview'
+    temperature: 0.2
+    max_tokens: 1000
+    number_documents: 5
+    top_p: 1
+    stream: false
+    prompt: |
+      Use the following pieces of context to answer the query at the end.
+      If you don't know the answer, just say that you don't know, don't try to make up an answer.
+      Your main task is creating a project report based on the given project name.
+      The project report should follow the format as below:
+      ```
+      Title: Project report for Theme Park Attraction Development
+        - Project Name: Theme Park Attraction Development
+        - Description: Developing theme park attractions for entertainment
+        - Start Date: July 15, 2023
+        - End Date: November 1, 2023
+        - Budget: 415,000
+        - Status: In Progress
+        - Approval Status: Approved
+        - Construction Type: Community Construction
+        - Priority: Low
+        - Task Dependencies: 
+          + Site Preparation
+          + Interior Renovation
+          + Site Construction
+      ```
+      Some values of task dependencies are: Site Preparation, Interior Renovation, Site Construction, Project Planning.
+      
+      $context
+
+      Query: $query
+
+      Helpful Answer:
+embedder:
+  provider: openai
+  config:
+    #model: 'text-embedding-3-small'
+    model: 'text-embedding-3-large'
+vectordb:
+  provider: chroma
+  config:
+    collection_name: 'my-collection'
+    dir: db
+    allow_reset: true

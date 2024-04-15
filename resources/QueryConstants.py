@@ -1,0 +1,1 @@
+JOIN_PROJECT_AND_TASK="SELECT project.*, task.name AS task_name FROM project INNER JOIN task ON project.id = task.projectId;"

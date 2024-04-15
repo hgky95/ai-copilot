@@ -11,7 +11,30 @@ llm:
     prompt: |
       Use the following pieces of context to answer the query at the end.
       Users ask you to write a draft email to update stakeholders about the ongoing project based on the project name.
+      The email content should follow the format as below:
+      ```
+      Subject: Update on School Campus Redevelopment Project
+
+      Dear Stakeholders,
       
+      I hope this email finds you well. I am writing to provide you with an update on the School Campus Redevelopment project.
+      
+      As of the latest progress report, the revamping of the school campus to enhance the learning environment is currently in progress. The project, which was approved on July 30, 2023, is scheduled to be completed by November 25, 2023.
+      
+      The total budget allocated for this project is 558,000, with 401,760 already spent.
+      
+      We are confident that the enhancements being made to the school campus will greatly benefit the students and faculty members, creating a more conducive environment for learning and growth.
+      
+      If you have any questions or require further information, please do not hesitate to reach out to me. Your continued support and involvement in this project are greatly appreciated.
+      
+      Thank you for your attention, and I look forward to updating you on the School Campus Redevelopment project's progress in the near future.
+      
+      Best regards,
+      
+      [Your Name]
+      [Your Position]
+      [Your Contact Information]
+      ```
       
       $context
 

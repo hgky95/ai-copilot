@@ -24,30 +24,22 @@ class AIIntegration(Resource):
 
         if PromptType.FORECAST.value == prompt_type.upper():
             embedchain_app = App.from_config(config_path="./config/forecast_config.yaml")
-            self.wipe_data(embedchain_app)
             embedchain_app.add(source='./dataset/cost_item.csv', data_type='csv')
             embedchain_app.add(source='https://www.oanda.com/currency-converter/live-exchange-rates/')
         elif PromptType.REPORT.value == prompt_type.upper():
             embedchain_app = App.from_config(config_path="./config/report_config.yaml")
-            self.wipe_data(embedchain_app)
             embedchain_app.add(JOIN_PROJECT_AND_TASK, data_type='mysql', loader=self.mysql_loader)
         elif PromptType.PLAN.value == prompt_type.upper():
-            #TODO: update plan_config.yaml
             embedchain_app = App.from_config(config_path="./config/plan_config.yaml")
-            self.wipe_data(embedchain_app)
             self.add_all_resources(embedchain_app)
         elif PromptType.EMAIL.value == prompt_type.upper():
             embedchain_app = App.from_config(config_path="./config/email_config.yaml")
-            self.wipe_data(embedchain_app)
             self.add_all_resources(embedchain_app)
         else:
             embedchain_app = App.from_config(config_path="./config/general_config.yaml")
-            self.wipe_data(embedchain_app)
             self.add_all_resources(embedchain_app)
 
-        final_response = embedchain_app.query(question,
-                                              #citations=True
-                                              )
+        final_response = embedchain_app.query(question)
         print("Final response: \n", final_response)
         return jsonify({"data": final_response})
 

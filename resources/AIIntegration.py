@@ -4,7 +4,7 @@ from flask_restful import Resource
 from embedchain.loaders.mysql import MySQLLoader
 from flask import request, jsonify
 from resources.PromptType import PromptType
-from resources.QueryConstants import JOIN_PROJECT_AND_TASK
+from resources.QueryConstants import JOIN_PROJECT_AND_TASK, ALL_PROJECTS, ALL_TASKS, ALL_CURRENCIES, ALL_MEMBERS
 
 
 class AIIntegration(Resource):
@@ -43,11 +43,8 @@ class AIIntegration(Resource):
         print("Final response: \n", final_response)
         return jsonify({"data": final_response})
 
-    def wipe_data(self, embedchain_app):
-        embedchain_app.reset()
-
     def add_all_resources(self, embedchain_app):
-        embedchain_app.add("SELECT * FROM project;", data_type='mysql', loader=self.mysql_loader)
-        embedchain_app.add("SELECT * FROM task;", data_type='mysql', loader=self.mysql_loader)
-        embedchain_app.add("SELECT * FROM currency;", data_type='mysql', loader=self.mysql_loader)
-        embedchain_app.add("SELECT * FROM member;", data_type='mysql', loader=self.mysql_loader)
+        embedchain_app.add(ALL_PROJECTS, data_type='mysql', loader=self.mysql_loader)
+        embedchain_app.add(ALL_TASKS, data_type='mysql', loader=self.mysql_loader)
+        embedchain_app.add(ALL_CURRENCIES, data_type='mysql', loader=self.mysql_loader)
+        embedchain_app.add(ALL_MEMBERS, data_type='mysql', loader=self.mysql_loader)

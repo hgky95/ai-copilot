@@ -4,7 +4,8 @@ from flask_restful import Resource
 from embedchain.loaders.mysql import MySQLLoader
 from flask import request, jsonify
 from resources.PromptType import PromptType
-from resources.QueryConstants import JOIN_PROJECT_AND_TASK, ALL_PROJECTS, ALL_TASKS, ALL_CURRENCIES, ALL_MEMBERS
+from resources.QueryConstants import JOIN_PROJECT_AND_TASK, ALL_PROJECTS, ALL_TASKS, ALL_CURRENCIES, ALL_MEMBERS, \
+    TASK_JOIN_TASKCOSTITEM_JOIN_COSTITEM
 
 
 class AIIntegration(Resource):
@@ -24,7 +25,8 @@ class AIIntegration(Resource):
 
         if PromptType.FORECAST.value == prompt_type.upper():
             embedchain_app = App.from_config(config_path="./config/forecast_config.yaml")
-            embedchain_app.add(source='./dataset/cost_item.csv', data_type='csv')
+            #embedchain_app.add(source='./dataset/cost_item.csv', data_type='csv')
+            embedchain_app.add(TASK_JOIN_TASKCOSTITEM_JOIN_COSTITEM, data_type='mysql', loader=self.mysql_loader)
             embedchain_app.add(source='https://www.oanda.com/currency-converter/live-exchange-rates/')
         elif PromptType.REPORT.value == prompt_type.upper():
             embedchain_app = App.from_config(config_path="./config/report_config.yaml")

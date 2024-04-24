@@ -5,3 +5,4 @@ db
 resources/data-generation/__pycache__
 
 resources/__pycache__
+.env

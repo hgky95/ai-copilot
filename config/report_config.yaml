@@ -13,7 +13,7 @@ llm:
       If you don't know the answer, just say that you don't know, don't try to make up an answer.
       Your main task is creating a project report based on the given project name.
       The project report should follow the format as below:
-      ```
+      
       Title: Project report for Theme Park Attraction Development
         - Project Name: Theme Park Attraction Development
         - Description: Developing theme park attractions for entertainment
@@ -33,7 +33,7 @@ llm:
         - Started by:
         - Completed by:
         - Closed by:
-      ```
+      
       Some values of task dependencies are: Site Preparation, Interior Renovation, Site Construction, Project Planning.
       
       $context
